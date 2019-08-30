@@ -892,8 +892,8 @@
     for (let i = 0; currentQuiz.questions.length > i; i++) {
       let question = currentQuiz.questions[i];
       let correctAnswers = [];
-      for(let j = 0; question.answers.length > j; j++) {
-        if(question.answers[j].correct === true) {
+      for(let j = 0; question.selected.length > j; j++) {
+        if(question.selected[j].correct === true) {
           correctAnswers[correctAnswers.length] = j;
         }
       }
@@ -948,13 +948,13 @@
       }
     }
     html += '</div>';
-    for (let j = 0; question.answers.length > j; j++) {
-      if (question.answers[j].correct === true) {
+    for (let j = 0; question.selected.length > j; j++) {
+      if (question.selected[j].correct === true) {
         html += '<div class="quiz-answer-correct">';
       } else {
         html += '<div class="quiz-answer">';
       }
-      html += `<div class="quiz-answer-number">${String.fromCharCode(j + 65)}</div>${question.answers[j].text}`;
+      html += `<div class="quiz-answer-number">${String.fromCharCode(j + 65)}</div>${question.selected[j].text}`;
       if (player1.answers[nr].includes(j)) {
         html += `<div class="player1-icon icon-active" style="background-image:url('${player1.character}')"></div>`;
       } else {
@@ -1346,11 +1346,11 @@
       }
       html += '</div>';
     }
-    for (j = 0; question.answers.length > j; j++) {
+    for (j = 0; question.selected.length > j; j++) {
       html += `
       <div class="quiz-answer">
       <div class="quiz-answer-number">${String.fromCharCode(j + 65)}</div>
-      ${question.answers[j].text}
+      ${question.selected[j].text}
       <div class="player1-icon"></div>
       <div class="player2-icon"></div>
       </div>
