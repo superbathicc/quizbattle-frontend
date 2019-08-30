@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Quiz App</title>
+  <style>
+    /*
+      #7289da 	(114,137,218)
+      #ffffff 	(255,255,255)
+      #99aab5 	(153,170,181)
+      #2c2f33 	(44,47,51)
+      #23272a 	(35,39,42)
+    */
+
+    @font-face {
+      font-family: Lato;
+      font-weight: normal;
+      font-style: normal;
+      src: url("/assets/fonts/Lato.woff");
+    }
+
+    @font-face {
+      font-family: Lato;
+      font-weight: bold;
+      font-style: normal;
+      src: url("/assets/fonts/Lato-Bold.woff");
+    }
+
+    @font-face {
+      font-family: Lato;
+      font-weight: normal;
+      font-style: italic;
+      src: url("/assets/fonts/Lato-Italic.woff");
+    }
+
+    @font-face {
+      font-family: Lato;
+      font-weight: bold;
+      font-style: italic;
+      src: url("/assets/fonts/Lato-BoldItalic.woff");
+    }
+
+    @font-face {
+      font-family: Montserrat;
+      font-weight: bold;
+      src: url("/assets/fonts/Montserrat.otf");
+    }
+
+    @font-face {
+      font-family: Ligature;
+      font-weight: normal;
+      font-style: normal;
+      src: url("/assets/fonts/Ligature.woff");
+    }
+
+
+    body {
+      margin: 0;
+      font-family: Lato, sans-serif;
+      font-variant-ligatures: none;
+      color: #222;
+    }
+
+    header {
+      height: 50px;
+      background-color: #2c2f33;
+      color: white;
+    }
+
+    div.header-content {
+      margin: auto;
+      max-width: 800px;
+      height: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.5em;
+      font-family: Montserrat;
+      padding-right: 10px;
+      padding-left: 10px;
+    }
+
+    div.nav-buttons {}
+
+    button.nav-button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Ligature;
+      width: 2.5em;
+      height: 2.5em;
+    }
+
+    main#main {
+      margin: auto;
+      max-width: 800px;
+      padding: 10px;
+      min-height:75vh;
+    }
+
+    footer{
+      background-color:#2c2f33;
+      color:white;
+    }
+
+    .footer-content{
+      margin:auto;
+      max-width:800px;
+      display:flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap:wrap;
+      padding:10px;
+    }
+
+    .footer-column{
+      flex-basis:25%;
+      flex-grow:1;
+      flex-shrink:1;
+      padding:10px;
+    }
+
+    h1.footer-heading{
+      font-family: Montserrat;
+      font-size:1.2em;
+      margin:0;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      font-family: Montserrat;
+      transition: all 0.3s cubic-bezier(.11, 1.45, .31, 1.64) 0s;
+      padding: 10px;
+      border-radius: 3px;
+      user-select: none;
+      -moz-user-select: none;
+      color: white;
+      background-color: #7289da;
+      box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+      outline: none;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    }
+
+    button:active {
+      transform: scale(1);
+      box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    }
+
+    input[type="file"] {
+      display:none;
+    }
+
+    label.file-input {
+      border: none;
+      cursor: pointer;
+      font-family: Montserrat;
+      transition: all 0.3s cubic-bezier(.11, 1.45, .31, 1.64) 0s;
+      padding: 10px;
+      border-radius: 3px;
+      user-select: none;
+      -moz-user-select: none;
+      color: white;
+      background-color: #7289da;
+      box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+      outline: none;
+      display:inline-block;
+    }
+
+    label.file-input:hover {
+      transform: scale(1.05);
+      box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    }
+
+    label.file-input:active {
+      transform: scale(1);
+      box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    }
+
+    button.main-button {
+      display: block;
+      margin-bottom: 1em;
+      font-size: 1.5em;
+      box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+    }
+
+    button.small-button {
+      display: inline-block;
+      margin-bottom: 1em;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+      font-size: 1em;
+    }
+
+    button.category {
+      display: inline-block;
+      margin-bottom: 1em;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+      background-color: #2c2f33;
+      margin-right: 0.5em;
+      font-size: 1em;
+    }
+
+    button.category-selected {
+      background-color: #7289da;
+    }
+
+    div.question {
+      border-radius: 3px;
+      padding: 10px;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+      animation: popIn 0.5s ease 0s;
+      margin-bottom: 1em;
+    }
+
+    div.results-screen {
+      border-radius: 3px;
+      padding: 10px;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+      animation: popIn 0.5s ease 0s;
+      margin-bottom: 1em;
+    }
+
+    div.quiz-question {}
+
+    div.quiz-text {
+      border-radius: 3px;
+      padding: 8px;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+      margin-bottom: 1em;
+      font-size: 1.5em;
+    }
+
+    div.quiz-answer {
+      border-radius: 3px;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+      margin-bottom: 1em;
+      padding: 8px;
+      position: relative;
+      opacity: 0;
+      animation: popIn 0.3s ease 0s forwards;
+      font-size: 1.3em;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    div.quiz-answer-correct {
+      border-radius: 3px;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+      margin-bottom: 1em;
+      padding: 8px;
+      position: relative;
+      font-size: 1.3em;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      background-color: #43b581;
+    }
+
+    div.winner-icon{
+      float:right;
+    }
+
+    div.winner-icon img{
+      width:200px;
+      height:auto;
+    }
+
+    div.player1-icon {
+      display: inline-flex;
+      height: 40px;
+      width: 40px;
+      position: absolute;
+      right: 100%;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    div.player2-icon {
+      display: inline-flex;
+      height: 40px;
+      width: 40px;
+      position: absolute;
+      left: 100%;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      margin-left: 10px;
+      padding: 1px;
+    }
+
+    .player1-icon.icon-active {
+      animation: icon-active 0.2s cubic-bezier(.17, .67, .54, 1.57) 0s;
+      border: 3px solid #3f5294;
+      background-position: 50%;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    .player2-icon.icon-active {
+      animation: icon-active 0.2s cubic-bezier(.17, .67, .54, 1.57) 0s;
+      border: 3px solid #940039;
+      background-position: 50%;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    @keyframes icon-active {
+      0% {
+        transform: scale(0)
+      }
+
+      100% {
+        transform: scale(1)
+      }
+    }
+
+    div.quiz-answer-number {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      height: 40px;
+      width: 40px;
+      font-family: Montserrat;
+      border-radius: 50%;
+      color: white;
+      background-color: #7289da;
+      padding: 10px;
+      font-size: 1.5em;
+      margin-right: 10px;
+      box-sizing: border-box;
+    }
+
+    div.quiz-header {
+      font-family: Montserrat;
+      font-size: 2em;
+      margin-bottom: 10px;
+      clear:both;
+    }
+
+    div#timer-bar {
+      height: 10px;
+      border-radius: 3px;
+    }
+
+    div#timer {
+      font-family: Montserrat;
+      font-size: 6em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    div.timer-number {
+      display: inline-block;
+      animation: popIn 0.3s ease 0s forwards;
+    }
+
+    div.timer-number-finished {
+      display: inline-block;
+      color: #7289da;
+      animation: popIn 0.3s ease 0s forwards;
+    }
+
+    @keyframes timer-bar {
+      0% {
+        width: 100%;
+        background-color: rgb(114, 137, 218);
+      }
+
+      40% {
+        background-color: rgb(114, 137, 218);
+      }
+
+      50% {
+        background-color: rgb(185, 142, 0);
+      }
+
+      75% {
+        background-color: rgb(185, 142, 0);
+      }
+
+      85% {
+        background-color: rgb(185, 0, 0);
+      }
+
+      100% {
+        width: 0%;
+        background-color: rgb(185, 0, 0);
+      }
+    }
+
+    div.question-header {
+      font-weight: bold;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      clear:both;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeOut {
+      0% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes popIn {
+      0% {
+        transform: perspective(700px) translate3d(0, 0, 20px);
+        opacity: 0;
+      }
+
+      100% {
+        transform: perspective(0px) translate3d(0, 0, 0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideInBottom {
+      0% {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+
+      100% {
+        transform: translateY(0px);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideInRight {
+      0% {
+        transform: translateX(1100px);
+      }
+
+      100% {
+        transform: translateX(0px);
+      }
+    }
+
+    @keyframes slideInLeft {
+      0% {
+        transform: translateX(-1100px);
+      }
+
+      100% {
+        transform: translateX(0px);
+      }
+    }
+
+    @keyframes slideOutLeft {
+      0% {
+        transform: translateX(0px);
+      }
+
+      100% {
+        transform: translateX(-1100px);
+      }
+    }
+
+    @keyframes slideOutRight {
+      0% {
+        transform: translateX(0px);
+      }
+
+      100% {
+        transform: translateX(1100px);
+      }
+    }
+
+    div#loading-text {
+      font-size:3em;
+      font-family:Montserrat;
+    }
+
+    div.loading-icons{
+      display:flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(114, 137, 218,0.4);
+      }
+      70% {
+        box-shadow: 0 0 0 50px rgba(114, 137, 218, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(114, 137, 218, 0);
+      }
+    }
+
+    div.quiz-text img { 
+      vertical-align: top;
+      max-height:25vh;
+    }
+
+    textarea[name="question"] {
+      font-family: Lato, sans-serif;
+      border-radius: 3px;
+      resize: none;
+      margin-bottom: 1em;
+      border: none;
+      padding: 5px;
+      width: 450px;
+      max-width: 100%;
+      box-sizing: border-box;
+      box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3) inset;
+    }
+
+    input[type="text"] {
+      font-family: Lato, sans-serif;
+      border-radius: 3px;
+      margin-bottom: 1em;
+      resize: none;
+      border: none;
+      padding: 5px;
+      box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3) inset;
+    }
+
+    div#quiz {}
+
+    div.question-text {}
+
+    div.question-answer {
+      animation: slideInBottom 0.3s cubic-bezier(.64, -0.7, .27, 1.83) 0s;
+      padding-bottom: 20px;
+      height: 40px;
+    }
+
+    div.remove-button {
+      float: right;
+    }
+
+    span.icon {
+      font-family: Ligature;
+    }
+
+    div.template {
+      display: none !important;
+    }
+
+    a.link{
+      color:#7289da;
+      text-decoration: none;
+    }
+
+    div.character-icons {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    button.character-icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100px;
+      width: 100px;
+      margin-right: 0.5em;
+      margin-bottom: 0.5em;
+      background-color: unset;
+      opacity: 0;
+    }
+
+    .player1-character-selected {
+      border: 3px solid #3f5294;
+    }
+
+    .player2-character-selected {
+      border: 3px solid #940039;
+    }
+    .cssload-dots {
+      width: 0;
+      height: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      margin: auto;
+      outline: 1px solid red;
+      filter: url(#goo);
+        -o-filter: url(#goo);
+        -ms-filter: url(#goo);
+        -webkit-filter: url(#goo);
+        -moz-filter: url(#goo);
+    }
+
+    .cssload-dot {
+      width: 0;
+      height: 0;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    .cssload-dot:before {
+      content: "";
+      width: 34px;
+      height: 34px;
+      border-radius: 49px;
+      background: rgb(251,211,1);
+      position: absolute;
+      left: 50%;
+      transform: translateY(0);
+        -o-transform: translateY(0);
+        -ms-transform: translateY(0);
+        -webkit-transform: translateY(0);
+        -moz-transform: translateY(0);
+      margin-left: -17.5px;
+      margin-top: -17.5px;
+    }
+
+
+
+    .cssload-dot:nth-child(5):before {
+      z-index: 100;
+      width: 44.5px;
+      height: 44.5px;
+      margin-left: -21.75px;
+      margin-top: -21.75px;
+      animation: cssload-dot-colors 4.6s ease infinite;
+    }
+
+    .cssload-dot:nth-child(1) {
+      animation: cssload-dot-rotate-1 4.6s 0s linear infinite;
+    }
+
+    .cssload-dot:nth-child(1):before {
+      background-color: rgb(255,50,112);
+      animation: cssload-dot-move 4.6s 0s ease infinite;
+    }
+
+    .cssload-dot:nth-child(2) {
+      animation: cssload-dot-rotate-2 4.6s 1.15s linear infinite;
+    }
+
+    .cssload-dot:nth-child(2):before {
+      background-color:#7289da;
+      animation: cssload-dot-move 4.6s 1.15s ease infinite;
+    }
+
+    .cssload-dot:nth-child(3) {
+      animation: cssload-dot-rotate-3 4.6s 2.3s linear infinite;
+    }
+
+    .cssload-dot:nth-child(3):before {
+      background-color:#940039;
+      animation: cssload-dot-move 4.6s 2.3s ease infinite;
+    }
+
+    .cssload-dot:nth-child(4) {
+      animation: cssload-dot-rotate-4 4.6s 3.45s linear infinite;
+    }
+
+    .cssload-dot:nth-child(4):before {
+      background-color:#3f5294;
+      animation: cssload-dot-move 4.6s 3.45s ease infinite;
+    }
+
+    @keyframes cssload-dot-move {
+      0% {
+        transform: translateY(0);
+      }
+      18%, 22% {
+        transform: translateY(-68px);
+      }
+      40%, 100% {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes cssload-dot-colors {
+      0% {
+        background-color:#7289da;
+      }
+      25% {
+        background-color:#940039;
+      }
+      50% {
+        background-color:#43b581;
+      }
+      75% {
+        background-color:#3f5294;
+      }
+      100% {
+        background-color:#2c2f33;
+      }
+    }
+
+    @keyframes cssload-dot-rotate-1 {
+      0% {
+        transform: rotate(-105deg);
+      }
+      100% {
+        transform: rotate(270deg);
+      }
+    }
+
+    
+
+    @keyframes cssload-dot-rotate-2 {
+      0% {
+        transform: rotate(165deg);
+      }
+      100% {
+        transform: rotate(540deg);
+      }
+    }
+
+   
+    @keyframes cssload-dot-rotate-3 {
+      0% {
+        transform: rotate(435deg);
+      }
+      100% {
+        transform: rotate(810deg);
+      }
+    }
+
+    
+
+    @keyframes cssload-dot-rotate-4 {
+      0% {
+        transform: rotate(705deg);
+      }
+      100% {
+        transform: rotate(1080deg);
+      }
+    }
+
+  </style>
+
+</head>
+
+<script>
+  // Start on DOM-Load
+  document.addEventListener("DOMContentLoaded", function () {
+    initialize();
+  });
+
+  // catch keypress
+  window.addEventListener("keyup", function (e) {
+    keyPress(e);
+  }, false);
+
+  // handle keypress
+  function keyPress(e) {
+    // Taste 1, Spieler 1
+    if (e.keyCode == 49) {
+      lockAnswer(1, 1);
+    }
+    // Taste 2, Spieler 1
+    else if (e.keyCode == 50) {
+      lockAnswer(1, 2);
+    }
+    // Taste 3, Spieler 1
+    else if (e.keyCode == 51) {
+      lockAnswer(1, 3);
+    }
+    // Taste 4, Spieler 1
+    else if (e.keyCode == 52) {
+      lockAnswer(1, 4);
+    }
+    // Taste 1, Spieler 2
+    else if (e.keyCode == 65) {
+      lockAnswer(2, 1);
+    }
+    // Taste 2, Spieler 2
+    else if (e.keyCode == 66) {
+      lockAnswer(2, 2);
+    }
+    // Taste 3, Spieler 2
+    else if (e.keyCode == 67) {
+      lockAnswer(2, 3);
+    }
+    // Taste 4, Spieler 2
+    else if (e.keyCode == 68) {
+      lockAnswer(2, 4);
+    }
+  }
+  // Globals
+  /*=========================================================*/
+  let main = "";
+  let currentQuestionNr = 0;
+  let currentQuiz = {};
+  let questionActive = false;
+  let player1 = {};
+  let player2 = {};
+  let playerToSelect = 1;
+  let categories = [];
+  let selectedCategories= [];
+  /*=========================================================*/
+
+  function initialize() {
+    main = document.getElementById("main");
+    questionActive = false;
+    currentQuestionNr = 0;
+    currentQuiz = {};
+    currentQuiz.questions = [];
+    player1 = {};
+    player1.answers = [];
+    player1.correctAnswers = 0;
+    player1.character = "";
+    player1.name = "Spieler 1";
+    player2 = {};
+    player2.answers = [];
+    player2.correctAnswers = 0;
+    player2.character = "";
+    player2.name = "Spieler 2";
+    selectedCategories = [];
+    startApp();
+  }
+
+  // display functions
+  function startApp() {
+    main.innerHTML = getTemplate("start");
+    getCategories();
+  }
+
+  function playQuiz() {
+    main.innerHTML = getTemplate("play-quiz");
+    let container = document.getElementById("categories");
+    if(categories.length == 0) {
+      container.innerHTML = '<p>Es gibt noch keine Kategorien. Es müssen erst Kategorien mit Fragen erstellt werden.</p>';
+    }
+    for(let i = 0; categories.length > i; i++) {
+      var button = document.createElement("button");
+      button.className = "category";
+      button.setAttribute('onclick',`selectCategory(${i}), this.classList.toggle("category-selected")`);
+      button.innerHTML = categories[i].name;
+      container.appendChild(button);
+    }
+  }
+
+  function createQuestion() {
+    main.innerHTML = getTemplate("add-questions");
+    let container = document.getElementById("questions");
+    if(!container) return;
+    container.innerHTML = `
+    <div class="question">
+      <div class="question-header">Frage</div>
+      <div class="question-text"><textarea placeholder="Fragentext" default rows=5 name="question">Frage</textarea></div>
+      <label>Verfügbare Zeit</label><br>
+      <input type="text" name="question-time" value="10"><br>
+      <div class="question-answer">
+        <label>Antwort</label><br>
+        <input placeholder="Antwort" type="text" value="1" name="answer">
+        <input class="answer-checkbox" type="checkbox">
+        <label>Richtig</label>
+      </div>
+      <div class="question-answer">
+        <label>Antwort</label><br>
+        <input placeholder="Antwort" type="text" value="2" name="answer">
+        <input class="answer-checkbox" type="checkbox">
+        <label>Richtig</label>
+      </div>
+      <div class="question-answer">
+        <label>Antwort</label><br>
+        <input placeholder="Antwort" type="text" value="3" name="answer">
+        <input class="answer-checkbox" type="checkbox">
+        <label>Richtig</label>
+      </div>
+      <div class="question-answer">
+        <label>Antwort</label><br>
+        <input placeholder="Antwort" type="text" value="4" name="answer">
+        <input class="answer-checkbox" type="checkbox" checked>
+        <label>Richtig</label>
+      </div>
+      <div>
+        <button class="small-button" onclick="addAnswer(this.closest('div.question'))">Antwort hinzufügen</button>
+      </div>
+      <div>
+        <label>Kategorie</label><br>
+        <input placeholder="IT" type="text" value="IT" name="category">
+      </div>
+      <div>
+        <form action="" method="POST" enctype="multipart/form-data" id="upload">
+        <label>Opional: Datei (Bild oder Audio) hinzufügen</label><br>
+        <label class="file-input">Datei auswählen
+          <input accept="image/*,audio/*" type="file" onchange="document.getElementById('file-name').innerHTML = this.value" name="data">
+        </label>
+        <span id="file-name"></span>
+        </form>
+      </div>
+    </div>
+      `;
+  }
+
+  function startQuiz() {
+    startTimer(5, function () {
+      showQuestion(currentQuiz.questions[currentQuestionNr]);
+    }, true);
+  }
+
+  function showLoadingScreen(text) {
+    main.innerHTML = getTemplate("loading-screen");
+    document.getElementById("loading-text").innerHTML = text;
+  }
+
+  function showResults() {
+    questionActive = false;
+    let html = '';
+    html += '<div class="results-screen">';
+    for (let i = 0; currentQuiz.questions.length > i; i++) {
+      let question = currentQuiz.questions[i];
+      let correctAnswers = [];
+      for(let j = 0; question.answers.length > j; j++) {
+        if(question.answers[j].correct === true) {
+          correctAnswers[correctAnswers.length] = j;
+        }
+      }
+      if (checkAnswers(player1.answers[i], correctAnswers)) {
+        player1.correctAnswers++;
+      }
+      if (checkAnswers(player2.answers[i], correctAnswers)) {
+        player2.correctAnswers++;
+      }
+    }
+    if (player1.correctAnswers > player2.correctAnswers) {
+      html += `<div class="quiz-header">Ergebnis: ${player1.name} gewinnt!
+      <div class="winner-icon"><img src="${player1.character}"></div>
+      </div>
+      `;
+    } else if (player2.correctAnswers > player1.correctAnswers) {
+      html += `<div class="quiz-header">Ergebnis: ${player2.name} gewinnt!
+      <div class="winner-icon"><img src="${player2.character}"></div>
+      </div>
+      `;
+    } else {
+      html += '<div class="quiz-header">Ergebnis: Unentschieden</div>';
+    }
+    html += 
+    `<div class="quiz-header">Erreichte Punkte</div>
+    <p>${player1.name}: ${player1.correctAnswers}</p>
+    <p>${player2.name}: ${player2.correctAnswers}</p>
+    </div>
+    `;
+
+    html += '<div class="quiz-header">Ergebnisse im Detail</div>';
+
+    for (let i = 0; currentQuiz.questions.length > i; i++) {
+      var question = currentQuiz.questions[i];
+      html += getQuestionResult(question, i);
+    }
+
+    main.innerHTML = html;
+  }
+
+  function getQuestionResult(question, nr) {
+    var html = "";
+    html += `<div class="quiz-header">Frage ${(nr + 1)}</div>
+    <div class="quiz-question">
+    <div class="quiz-text">${question.text}`;
+    if(question.dataType !== null && typeof question.dataType !== 'undefined') {
+      if(question.dataType.match('image')) {
+        html += `<img src="data:${question.dataType};${question.dataEncoding},${question.data}">`;
+      }
+      else if (question.dataType.match('audio')) {
+        html += `<br><audio src="data:${question.dataType};${question.dataEncoding},${question.data}" controls="controls"></audio>`;
+      }
+    }
+    html += '</div>';
+    for (let j = 0; question.answers.length > j; j++) {
+      if (question.answers[j].correct === true) {
+        html += '<div class="quiz-answer-correct">';
+      } else {
+        html += '<div class="quiz-answer">';
+      }
+      html += `<div class="quiz-answer-number">${String.fromCharCode(j + 65)}</div>${question.answers[j].text}`;
+      if (player1.answers[nr].includes(j)) {
+        html += `<div class="player1-icon icon-active" style="background-image:url('${player1.character}')"></div>`;
+      } else {
+        html += '<div class="player1-icon"></div>';
+      }
+      if (player2.answers[nr].includes(j)) {
+        html += `<div class="player2-icon icon-active" style="background-image:url('${player2.character}')"></div>`;
+      } else {
+        html += '<div class="player2-icon"></div>';
+      }
+      html += '</div>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  function characterSelect() {
+    main.innerHTML = getTemplate("character-select");
+    var iconContainer = main.getElementsByClassName("character-icons")[0];
+    for (let i = 1; i <= 42; i++) {
+      var button = document.createElement("button");
+      button.className = "character-icon";
+      button.setAttribute("onclick", "selectCharacter(this)");
+      button.innerHTML = '<img src="/assets/images/characters/_(' + i + ').png">';
+      button.style.animation = 'popIn 0.2s ease ' + (i * 0.05) + 's forwards';
+      iconContainer.appendChild(button);
+    }
+  }
+
+
+  function selectCharacter(src) {
+    var charSource = src.firstChild.src;
+    if (playerToSelect == 1) {
+      var selected = document.getElementsByClassName("player1-character-selected");
+      for (let i = selected.length; i--;) {
+        selected[i].classList.remove("player1-character-selected");
+      }
+      src.classList.add("player1-character-selected");
+      player1.character = charSource;
+      playerToSelect = 2;
+    } else {
+      var selected = document.getElementsByClassName("player2-character-selected");
+      for (let i = selected.length; i--;) {
+        selected[i].classList.remove("player2-character-selected");
+      }
+      src.classList.add("player2-character-selected");
+      player2.character = charSource;
+      playerToSelect = 1;
+    }
+  }
+
+  function addAnswer(src) {
+    let question = src;
+    if (!question) return;
+    let answer = document.createElement("div");
+    answer.className = "question-answer";
+    let answerHTML = `
+    <label>Antwort</label><br>
+    <input placeholder="Antwort hier eingeben" type="text" name="answer">
+    <input class="answer-checkbox" type="checkbox">
+    <label>Richtig</label>
+    `;
+    let answers = document.querySelectorAll("div.question-answer");
+    answer.innerHTML = answerHTML;
+    question.insertBefore(answer, answers[answers.length-1].nextElementSibling);
+  }
+
+  function selectCategory(i) {
+    if(selectedCategories.includes(categories[i])) {
+      selectedCategories.pop(categories[i]);
+    }
+    else {
+      selectedCategories.push(categories[i]);
+    }
+  }
+
+  function getRandomQuestion(categoryID, questionNr) {
+    let xhttp = new XMLHttpRequest();
+    xhttp.open('GET', `http://localhost:3003/question?category=${categoryID}`, true);
+    //xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    let questionResponse = {};
+          
+    xhttp.onreadystatechange = function () {
+      if (xhttp.readyState == 4) {
+        if((xhttp.status > 199 && xhttp.status < 300) || xhttp.status == 304) {
+          console.log(xhttp.responseText)
+          currentQuiz.questions[questionNr] = JSON.parse(xhttp.responseText);
+        }
+        else{
+          alert("Could not get random question.");
+          return null;
+        }
+      }
+    }
+    xhttp.send(`?category=${categoryID}`);
+  }
+
+  function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
+
+  function getQuiz() {
+    showLoadingScreen("Quiz wird erstellt...");
+    let minQuestions = 5;
+    let maxQuestions = 10;
+    let questionAmount = getRandomInt(minQuestions, maxQuestions);
+
+    let interval = 100;
+    let timeOut = interval;
+
+    for(let i = 0; questionAmount > i; i++) {
+      window.setTimeout(function() {
+        let randomCat = getRandomInt(0, selectedCategories.length - 1);
+        let category = selectedCategories[randomCat];
+        getRandomQuestion(category._id, i);
+      },timeOut);
+      timeOut += interval;
+    }
+
+    window.setTimeout(function() {
+      characterSelect();
+    },timeOut);
+
+  }
+
+  function getCategories() {
+    let container = document.getElementById("categories");
+    if(!container) return;
+    var xhttp = new XMLHttpRequest();
+    xhttp.open('GET', 'http://localhost:3003/categories');
+    
+    xhttp.onreadystatechange = function () {
+      if (xhttp.readyState == 4) {
+          if(xhttp.status >= 200 && xhttp.status < 300) {
+          var response = xhttp.responseText;
+          try {
+            response = JSON.parse(response);
+            for(let i = 0; response.length > i; i++) {
+              categories[i] = response[i];
+              categories[i].selected = false;
+            }
+          }
+          catch(e) {
+            alert("Could not parse response." + e);
+          }
+        }
+        else{
+          alert("Could not get categories.");
+        }
+      }
+
+    }
+    xhttp.send();
+    return; 
+  }
+
+  function saveQuestion() {
+    let questionContainer = document.getElementsByClassName("question")[0];
+
+    let question = {};
+    let answerArray = [];
+
+    if (questions.length == 0) {
+      alert("Error: No questions found.");
+      return;
+    }
+
+    let foundAnswer = false;
+
+    let questionText = questionContainer.querySelector('textarea[name="question"]').value;
+    if(questionText === "") {
+      alert("Fehler: Die Frage kann nicht leer sein.");
+    }
+    let questionTime = parseInt(questionContainer.querySelector('input[name="question-time"').value) || 10;
+    let answers = questionContainer.getElementsByClassName("question-answer");
+    let categoryName = questionContainer.querySelector('input[name="category"]').value;
+    let file = questionContainer.querySelector('input[name="data"').value;
+    if(categoryName === "") {
+      alert("Fehler: Keine Kategorie angegeben.");
+      return;
+    }
+
+    for (let j = 0; answers.length > j; j++) {
+      answerArray[j] = {};
+      answerArray[j].text = answers[j].querySelector('input[name="answer"]').value;
+      if(answerArray[j].text === "") {
+        alert("Fehler: Eine Antwort kann nicht leer sein. Antwort:" + (j+1));
+      }
+      if (answers[j].querySelector('input[type="checkbox"]').checked == true) {
+        foundAnswer = true;
+        answerArray[j].correct = true;
+      }
+      else {
+        answerArray[j].correct = false;
+      }
+    }
+    if (!foundAnswer) {
+      alert("Your question needs at least one correct answer!");
+      return;
+    }
+    question = {
+      text: questionText
+    };
+
+    let xhttp = new XMLHttpRequest();
+    xhttp.open('POST', 'http://localhost:3003/question', true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+
+    let interval = 100;
+    let timeOut = interval;
+
+    xhttp.onreadystatechange = function () {
+      if (xhttp.readyState === 4) {
+          if(xhttp.status >= 200 && xhttp.status < 300) {
+          let questionResponse = xhttp.responseText;
+          try {
+            questionResponse = JSON.parse(questionResponse);
+            for(let i = 0; answers.length > i; i++) {
+              window.setTimeout(function() {
+                if(saveAnswer(questionResponse._id, answerArray[i]) === false) {
+                  alert("Fehler beim Speichern der Frage.");
+                  return;
+                }
+              },timeOut);
+              timeOut += interval;
+            }
+            window.setTimeout(function() {
+              if(setCategory(questionResponse._id,categoryName) === false){
+                alert("Fehler beim Speichern der Frage.");
+                return;
+              }
+              else {
+                alert("Frage gespeichert.");
+                getCategories();
+              }
+            },timeOut)
+            timeOut += interval;
+            if(file !== "") {
+              let form = document.getElementById("upload");
+              let fileData = new FormData(form);
+              window.setTimeout(function() {
+                sendQuestionData(questionResponse._id, fileData)
+              },timeOut)
+            }
+          }
+          catch(e) {
+            alert("Could not parse response." + e);
+            return;
+          }
+        }
+        else{
+          alert("Could not save question.");
+          return;
+        }
+      }
+
+    }
+    xhttp.send(JSON.stringify(question));
+    return;
+
+  }
+
+  function sendQuestionData(questionID, data) {
+    let xhttp = new XMLHttpRequest();
+    xhttp.open('POST', 'http://localhost:3003/question/' + questionID + '/data', true);
+    //xhttp.setRequestHeader("Content-type", "multipart/form-data");
+ 
+    xhttp.onreadystatechange = function () {
+      if (xhttp.readyState == 4) {
+        if(xhttp.status >= 200 && xhttp.status < 300) {
+          return true;
+          // let answerResponse = xhttp.responseText;
+          // console.log(answerResponse);
+          // try {
+          //   answerResponse = JSON.parse(answerResponse);
+          // }
+          // catch(e) {
+          //   alert("Could not parse response." + e);
+          //   return;
+          // }
+        }
+        else{
+          alert("Could not save answer.");
+          return false;
+        }
+      }
+
+    }
+    xhttp.send(data);
+  }
+
+  function setCategory(questionID, categoryName) {
+
+    let categoryID = "";
+
+    for(let i = 0; categories.length > i; i++) {
+      if(categories[i].name === categoryName) {
+        categoryID = categories[i]._id;
+      }
+    }
+
+    let xhttp = new XMLHttpRequest();
+    xhttp.open('POST', 'http://localhost:3003/question/' + questionID + '/category', true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+         
+    xhttp.onreadystatechange = function () {
+      if (xhttp.readyState == 4) {
+        if(xhttp.status >= 200 && xhttp.status < 300) {
+          return true;
+          // let catResponse = xhttp.responseText;
+          // console.log(catResponse);
+          // try {
+          //   catResponse = JSON.parse(catResponse);
+          // }
+          // catch(e) {
+          //   alert("Could not parse response." + e);
+          //   return;
+          // }
+        }
+        else{
+          alert("Could not set category.");
+          return false;
+        }
+      }
+
+    }
+    if(categoryID !== "") {
+      console.log("using existing category " + categoryID);
+      xhttp.send(`{"id":"${categoryID}"}`);
+    } 
+    else {
+      console.log("creating new category" + categoryName);
+      xhttp.send('{"name":"' + categoryName + '"}');
+    }
+  }
+
+  function saveAnswer(questionID, answer) {
+    let xhttp = new XMLHttpRequest();
+    xhttp.open('POST', 'http://localhost:3003/question/' + questionID + '/answer', true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+ 
+    xhttp.onreadystatechange = function () {
+      if (xhttp.readyState == 4) {
+        if(xhttp.status > 199 && xhttp.status < 300) {
+          return true;
+          // let answerResponse = xhttp.responseText;
+          // console.log(answerResponse);
+          // try {
+          //   answerResponse = JSON.parse(answerResponse);
+          // }
+          // catch(e) {
+          //   alert("Could not parse response." + e);
+          //   return;
+          // }
+        }
+        else{
+          alert("Could not save answer.");
+          return false;
+        }
+      }
+
+    }
+    xhttp.send(JSON.stringify(answer));
+    
+  }
+
+  function showQuestion(question) {
+    let playAudio = false;
+    let audio;
+    let html = `
+    <div id="quiz">
+    <div class="quiz-header">Frage ${currentQuestionNr + 1} </div>
+    <div id="timer-bar" style="animation: timer-bar 10s linear 0s"></div>
+    <div class="quiz-question">
+    <div class="quiz-text">${question.text}
+    `;
+    if(question.dataType !== null && typeof question.dataType !== 'undefined') {
+      if(question.dataType.match('image')) {
+        html += `<img src="data:${question.dataType};${question.dataEncoding},${question.data}">`;
+      }
+      else if (question.dataType.match('audio')) {
+        audio = new Audio(`data:${question.dataType};${question.dataEncoding},${question.data}`);
+        playAudio = true;
+        html += `<img src="/assets/images/audio.png">`;
+      }
+    }
+    html += '</div>';
+    for (j = 0; question.answers.length > j; j++) {
+      html += `
+      <div class="quiz-answer">
+      <div class="quiz-answer-number">${String.fromCharCode(j + 65)}</div>
+      ${question.answers[j].text}
+      <div class="player1-icon"></div>
+      <div class="player2-icon"></div>
+      </div>
+      `;
+    }
+    html += `
+    </div>
+    </div>
+    `;
+    main.innerHTML = html;
+    questionActive = true;
+    if(playAudio) {
+      audio.play();
+      window.setTimeout(function() {
+        audio.pause();
+      },10000)
+    }
+
+    if (currentQuestionNr++ < currentQuiz.questions.length - 1) {
+      startTimer("10", function () {
+        saveAnswers();
+        showQuestion(currentQuiz.questions[currentQuestionNr]);
+      });
+    } else {
+      startTimer("10", function () {
+        saveAnswers();
+        showResults();
+      });
+    }
+  }
+
+  function startTimer(length, callback, timerVisible) {
+    if (timerVisible) {
+      showTimer(length);
+      length += 1;
+    }
+    window.setTimeout(function () {
+      callback();
+    }, length * 1000);
+  }
+
+  function showTimer(length) {
+    var html = '<div id="timer">' + length + '</div>';
+    main.innerHTML = html;
+    let timerId = setTimeout(function tick() {
+      let counter = parseInt(document.getElementById("timer").textContent);
+      if (counter - 1 > 0) {
+        document.getElementById("timer").innerHTML = `<div class="timer-number">${(counter - 1)}</div>`;
+      } else {
+        document.getElementById("timer").innerHTML = '<div class="timer-number-finished">Start!</div>';
+      }
+      if (counter > 1)
+        timerId = setTimeout(tick, 1000);
+    }, 1000);
+  }
+
+  function checkAnswers(playerAnswers, correctAnswers) {
+    if (playerAnswers.length !== correctAnswers.length)
+      return false;
+    for (var i = playerAnswers.length; i--;) {
+      if (playerAnswers[i] !== correctAnswers[i])
+        return false;
+    }
+    return true;
+  }
+
+  function saveAnswers() {
+    var answers = document.getElementsByClassName("quiz-answer");
+    var p1Answers = [];
+    var p2Answers = [];
+    var p1AnswerCount = 0;
+    var p2AnswerCount = 0;
+    for (let i = 0; answers.length > i; i++) {
+      var p1 = answers[i].getElementsByClassName("player1-icon")[0];
+      var p2 = answers[i].getElementsByClassName("player2-icon")[0];
+      if (p1.classList.contains("icon-active")) {
+        p1Answers[p1AnswerCount] = i;
+        p1AnswerCount++;
+      }
+      if (p2.classList.contains("icon-active")) {
+        p2Answers[p2AnswerCount] = i;
+        p2AnswerCount++;
+      }
+    }
+    player1.answers[currentQuestionNr - 1] = p1Answers;
+    player2.answers[currentQuestionNr - 1] = p2Answers;
+  }
+
+  function lockAnswer(playerNr, answerNr) {
+    if (!questionActive) return;
+    var answer = document.getElementsByClassName("quiz-answer")[answerNr - 1];
+    var icon = answer.getElementsByClassName("player" + playerNr + "-icon")[0];
+    icon.classList.toggle("icon-active");
+    if (playerNr == 1) {
+      icon.style.backgroundImage = `url("${player1.character}")`;
+    } else {
+      icon.style.backgroundImage = `url("${player2.character}")`;
+    }
+  }
+
+  // Get template to display
+  function getTemplate(id) {
+    var template = document.getElementById(id);
+    if (!template) {
+      template = document.getElementById("error");
+    }
+    template = template.innerHTML;
+    return template.trim();
+  }
+</script>
+
+<body>
+  <header>
+    <div class="header-content">Quiz Battle
+      <div class="nav-buttons">
+        <button class="nav-button" onclick="initialize()">home</button>
+      </div>
+    </div>
+  </header>
+  <main id="main"></main>
+  <footer>
+    <div class="footer-content">
+      <div class="footer-column">
+        <img style="max-width: 90%;" src="/assets/images/superbasic.png">
+      </div>
+      <div class="footer-column">
+        <h1 class="footer-heading">Impressum</h1>
+        <p>Superbasic GmbH<br>
+          Andreas-Gordon-Schule<br>
+          Weidengasse 8<br>
+          99089 Erfurt
+
+        </p>
+      </div>
+      <div class="footer-column">
+        <h1 class="footer-heading">Credits</h1>
+        <p>Character Icons made by <a class="link" href="https://www.freepik.com/" target="blank" rel="noopener">Frepik</a> from <a class="link" href="http://www.flaticon.com" target="blank" rel="noopener">www.flaticon.com</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="template" id="start">
+    <button class="main-button" onclick="playQuiz()"><span class="icon">play </span>Quiz spielen</button>
+    <button class="main-button" onclick="createQuestion()"><span class="icon">add </span>Frage hinzufügen</button>
+  </div>
+
+  <div class="template" id="add-questions">
+    <div id="questions"></div>
+  <button class="small-button" onclick="saveQuestion()">Frage speichern</button>
+  </div>
+
+  <div class="template" id="play-quiz">
+    <div class="quiz-header">Kategorien wählen</div>
+    <div id="categories"></div>
+    <button class="small-button" onclick="getQuiz()">Quiz starten</button>
+  </div>
+  <div class="template" id="loading-screen">
+    <div id="loading-text"></div>
+    <div class="loading-icons">
+      <div class="cssload-dots">
+        <div class="cssload-dot"></div>
+        <div class="cssload-dot"></div>
+        <div class="cssload-dot"></div>
+        <div class="cssload-dot"></div>
+        <div class="cssload-dot"></div>
+      </div>
+      
+      <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="goo">
+            <feGaussianBlur in="SourceGraphic" result="blur" stdDeviation="12" ></feGaussianBlur>
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0	0 1 0 0 0	0 0 1 0 0	0 0 0 18 -7" result="goo" ></feColorMatrix>
+            <!--<feBlend in2="goo" in="SourceGraphic" result="mix" ></feBlend>-->
+          </filter>
+        </defs>
+      </svg>
+    </div>
+  </div>
+
+
+  <div class="template" id="character-select">
+    <div class="quiz-header">Charakterauswahl</div>
+    <div>
+      <label>Name Spieler 1</label><br><input type="text" onchange="player1.name = this.value;"><br>
+      <label>Name Spieler 2</label><br><input type="text" onchange="player2.name = this.value;">
+    </div>
+    <div class="character-icons"></div>
+    <button class="main-button" onclick="startQuiz()">Start</button>
+  </div>
+
+  <div class="template" id="error">
+    <div class="quiz-header">Fehler</div>
+    <p>Interner Fehler.</p>
+  </div>
+
+</body>
+
+</html>
