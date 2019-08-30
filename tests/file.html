@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <input type="text" id="questionId">
+
+  <form action="" method="POST" enctype="multipart/form-data" id="upload">
+    <input type="file" name="data">
+    <button type="submit">Sumbit</button>
+  </form>
+
+  <script>
+    var inp = document.getElementById('questionId');
+    var uld = document.getElementById('upload');
+    inp.onchange = function() {
+      uld.setAttribute('action', 'http://localhost:3003/question/' + inp.value + '/data');
+    }
+
+    uld.onsubmit = function(event) {
+      event.preventDefault();
+
+      let req = new XMLHttpRequest();
+      req.onload = function(e) {
+        console.log(JSON.parse(this.responseText));
+      }
+
+      req.open('POST', uld.getAttribute('action'), true);
+      req.send(new FormData(uld));
+    }
+  </script>
+</body>
+</html>

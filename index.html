@@ -300,7 +300,7 @@
 
     .player1-icon.icon-active {
       animation: icon-active 0.2s cubic-bezier(.17, .67, .54, 1.57) 0s;
-      border: 3px solid #3f5294;
+      border: 3px solid #3ae9b5;
       background-position: 50%;
       background-size: cover;
       background-repeat: no-repeat;
@@ -308,7 +308,7 @@
 
     .player2-icon.icon-active {
       animation: icon-active 0.2s cubic-bezier(.17, .67, .54, 1.57) 0s;
-      border: 3px solid #940039;
+      border: 3px solid #d63070;
       background-position: 50%;
       background-size: cover;
       background-repeat: no-repeat;
@@ -490,7 +490,7 @@
       }
     }
 
-    div#loading-text {
+    div.loading-text {
       font-size:3em;
       font-family:Montserrat;
     }
@@ -513,8 +513,12 @@
       }
     }
 
-    div.quiz-text img { 
-      vertical-align: top;
+    div.quiz-media {
+      display:flex;
+      justify-content: center;
+    }
+
+    div.quiz-media img { 
       max-height:25vh;
     }
 
@@ -587,13 +591,19 @@
       opacity: 0;
     }
 
-    .player1-character-selected {
-      border: 3px solid #3f5294;
+    button.character-icon img {
+      height: auto;
+      width: 100%;
     }
 
-    .player2-character-selected {
-      border: 3px solid #940039;
+    button.character-icon.player1-character-selected {
+      border: 3px solid #3ae9b5;
     }
+
+    button.character-icon.player2-character-selected {
+      border: 3px solid #d63070;
+    }
+
     .cssload-dots {
       width: 0;
       height: 0;
@@ -844,7 +854,7 @@
 
   function playQuiz() {
     main.innerHTML = getTemplate("play-quiz");
-    let container = document.getElementById("categories");
+    let container = main.getElementsByClassName("categories")[0];
     if(categories.length == 0) {
       container.innerHTML = '<p>Es gibt noch keine Kategorien. Es müssen erst Kategorien mit Fragen erstellt werden.</p>';
     }
@@ -859,56 +869,9 @@
 
   function createQuestion() {
     main.innerHTML = getTemplate("add-questions");
-    let container = document.getElementById("questions");
+    let container = main.getElementsByClassName("questions")[0];
     if(!container) return;
-    container.innerHTML = `
-    <div class="question">
-      <div class="question-header">Frage</div>
-      <div class="question-text"><textarea placeholder="Fragentext" default rows=5 name="question">Frage</textarea></div>
-      <label>Verfügbare Zeit</label><br>
-      <input type="text" name="question-time" value="10"><br>
-      <div class="question-answer">
-        <label>Antwort</label><br>
-        <input placeholder="Antwort" type="text" value="1" name="answer">
-        <input class="answer-checkbox" type="checkbox">
-        <label>Richtig</label>
-      </div>
-      <div class="question-answer">
-        <label>Antwort</label><br>
-        <input placeholder="Antwort" type="text" value="2" name="answer">
-        <input class="answer-checkbox" type="checkbox">
-        <label>Richtig</label>
-      </div>
-      <div class="question-answer">
-        <label>Antwort</label><br>
-        <input placeholder="Antwort" type="text" value="3" name="answer">
-        <input class="answer-checkbox" type="checkbox">
-        <label>Richtig</label>
-      </div>
-      <div class="question-answer">
-        <label>Antwort</label><br>
-        <input placeholder="Antwort" type="text" value="4" name="answer">
-        <input class="answer-checkbox" type="checkbox" checked>
-        <label>Richtig</label>
-      </div>
-      <div>
-        <button class="small-button" onclick="addAnswer(this.closest('div.question'))">Antwort hinzufügen</button>
-      </div>
-      <div>
-        <label>Kategorie</label><br>
-        <input placeholder="IT" type="text" value="IT" name="category">
-      </div>
-      <div>
-        <form action="" method="POST" enctype="multipart/form-data" id="upload">
-        <label>Opional: Datei (Bild oder Audio) hinzufügen</label><br>
-        <label class="file-input">Datei auswählen
-          <input accept="image/*,audio/*" type="file" onchange="document.getElementById('file-name').innerHTML = this.value" name="data">
-        </label>
-        <span id="file-name"></span>
-        </form>
-      </div>
-    </div>
-      `;
+    container.innerHTML = getTemplate("add-question");
   }
 
   function startQuiz() {
@@ -919,7 +882,7 @@
 
   function showLoadingScreen(text) {
     main.innerHTML = getTemplate("loading-screen");
-    document.getElementById("loading-text").innerHTML = text;
+    main.getElementsByClassName("loading-text")[0].innerHTML = text;
   }
 
   function showResults() {
@@ -1054,7 +1017,7 @@
     <input class="answer-checkbox" type="checkbox">
     <label>Richtig</label>
     `;
-    let answers = document.querySelectorAll("div.question-answer");
+    let answers = main.querySelectorAll("div.question-answer");
     answer.innerHTML = answerHTML;
     question.insertBefore(answer, answers[answers.length-1].nextElementSibling);
   }
@@ -1070,7 +1033,7 @@
 
   function getRandomQuestion(categoryID, questionNr) {
     let xhttp = new XMLHttpRequest();
-    xhttp.open('GET', `http://localhost:3003/question?category=${categoryID}`, true);
+    xhttp.open('GET', `http://localhost:3003/question?category=${categoryID}&answers=4`, true);
     //xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     let questionResponse = {};
           
@@ -1086,7 +1049,7 @@
         }
       }
     }
-    xhttp.send(`?category=${categoryID}`);
+    xhttp.send();
   }
 
   function getRandomInt(min, max) {
@@ -1097,8 +1060,8 @@
 
   function getQuiz() {
     showLoadingScreen("Quiz wird erstellt...");
-    let minQuestions = 5;
-    let maxQuestions = 10;
+    let minQuestions = 10;
+    let maxQuestions = 20;
     let questionAmount = getRandomInt(minQuestions, maxQuestions);
 
     let interval = 100;
@@ -1120,8 +1083,6 @@
   }
 
   function getCategories() {
-    let container = document.getElementById("categories");
-    if(!container) return;
     var xhttp = new XMLHttpRequest();
     xhttp.open('GET', 'http://localhost:3003/categories');
     
@@ -1153,14 +1114,14 @@
   function saveQuestion() {
     let questionContainer = document.getElementsByClassName("question")[0];
 
-    let question = {};
-    let answerArray = [];
-
-    if (questions.length == 0) {
+    if(questionContainer == null) {
       alert("Error: No questions found.");
       return;
     }
 
+    let question = {};
+    let answerArray = [];
+    
     let foundAnswer = false;
 
     let questionText = questionContainer.querySelector('textarea[name="question"]').value;
@@ -1195,7 +1156,8 @@
       return;
     }
     question = {
-      text: questionText
+      text: questionText,
+      time: questionTime
     };
 
     let xhttp = new XMLHttpRequest();
@@ -1321,11 +1283,9 @@
 
     }
     if(categoryID !== "") {
-      console.log("using existing category " + categoryID);
       xhttp.send(`{"id":"${categoryID}"}`);
     } 
     else {
-      console.log("creating new category" + categoryName);
       xhttp.send('{"name":"' + categoryName + '"}');
     }
   }
@@ -1366,11 +1326,12 @@
     let html = `
     <div id="quiz">
     <div class="quiz-header">Frage ${currentQuestionNr + 1} </div>
-    <div id="timer-bar" style="animation: timer-bar 10s linear 0s"></div>
+    <div id="timer-bar" style="animation: timer-bar ${question.time}s linear 0s"></div>
     <div class="quiz-question">
-    <div class="quiz-text">${question.text}
+    <div class="quiz-text">${question.text}</div>
     `;
     if(question.dataType !== null && typeof question.dataType !== 'undefined') {
+      html += '<div class="quiz-media">';
       if(question.dataType.match('image')) {
         html += `<img src="data:${question.dataType};${question.dataEncoding},${question.data}">`;
       }
@@ -1379,8 +1340,8 @@
         playAudio = true;
         html += `<img src="/assets/images/audio.png">`;
       }
+      html += '</div>';
     }
-    html += '</div>';
     for (j = 0; question.answers.length > j; j++) {
       html += `
       <div class="quiz-answer">
@@ -1405,12 +1366,12 @@
     }
 
     if (currentQuestionNr++ < currentQuiz.questions.length - 1) {
-      startTimer("10", function () {
+      startTimer(question.time, function () {
         saveAnswers();
         showQuestion(currentQuiz.questions[currentQuestionNr]);
       });
     } else {
-      startTimer("10", function () {
+      startTimer(question.time, function () {
         saveAnswers();
         showResults();
       });
@@ -1533,17 +1494,17 @@
   </div>
 
   <div class="template" id="add-questions">
-    <div id="questions"></div>
+    <div class="questions"></div>
   <button class="small-button" onclick="saveQuestion()">Frage speichern</button>
   </div>
 
   <div class="template" id="play-quiz">
     <div class="quiz-header">Kategorien wählen</div>
-    <div id="categories"></div>
+    <div class="categories"></div>
     <button class="small-button" onclick="getQuiz()">Quiz starten</button>
   </div>
   <div class="template" id="loading-screen">
-    <div id="loading-text"></div>
+    <div class="loading-text"></div>
     <div class="loading-icons">
       <div class="cssload-dots">
         <div class="cssload-dot"></div>
@@ -1574,6 +1535,56 @@
     </div>
     <div class="character-icons"></div>
     <button class="main-button" onclick="startQuiz()">Start</button>
+  </div>
+
+  <div class="template" id="add-question">
+    <div class="question">
+      <div class="question-header">Frage</div>
+      <div class="question-text"><textarea placeholder="Fragentext" default rows=5 name="question">Frage</textarea></div>
+      <label>Verfügbare Zeit</label><br>
+      <input type="text" name="question-time" value="10"><br>
+      <div class="question-answer">
+        <label>Antwort</label><br>
+        <input placeholder="Antwort" type="text" value="1" name="answer">
+        <input class="answer-checkbox" type="checkbox">
+        <label>Richtig</label>
+      </div>
+      <div class="question-answer">
+        <label>Antwort</label><br>
+        <input placeholder="Antwort" type="text" value="2" name="answer">
+        <input class="answer-checkbox" type="checkbox">
+        <label>Richtig</label>
+      </div>
+      <div class="question-answer">
+        <label>Antwort</label><br>
+        <input placeholder="Antwort" type="text" value="3" name="answer">
+        <input class="answer-checkbox" type="checkbox">
+        <label>Richtig</label>
+      </div>
+      <div class="question-answer">
+        <label>Antwort</label><br>
+        <input placeholder="Antwort" type="text" value="4" name="answer">
+        <input class="answer-checkbox" type="checkbox" checked>
+        <label>Richtig</label>
+      </div>
+      <div>
+        <button class="small-button" onclick="addAnswer(this.closest('div.question'))">Antwort hinzufügen</button>
+      </div>
+      <div>
+        <label>Kategorie</label><br>
+        <input placeholder="IT" type="text" value="IT" name="category">
+      </div>
+      <div>
+        <form action="" method="POST" enctype="multipart/form-data" id="upload">
+        <label>Opional: Datei (Bild oder Audio) hinzufügen</label><br>
+        <label class="file-input">Datei auswählen
+          <input accept="image/*,audio/*" type="file" onchange="document.getElementById('file-name').innerHTML = this.value" name="data">
+        </label>
+        <span id="file-name"></span>
+        </form>
+      </div>
+    </div>
+    
   </div>
 
   <div class="template" id="error">
