@@ -516,11 +516,14 @@
     div.quiz-media {
       display:flex;
       justify-content: center;
+      align-items: center;
+      flex-flow: column;
       margin-bottom:10px;
     }
 
     div.quiz-media img { 
       max-height:25vh;
+      width:auto;
     }
 
     textarea[name="question"] {
@@ -1361,9 +1364,11 @@
         html += `<img src="data:${question.dataType};${question.dataEncoding},${question.data}">`;
       }
       else if (question.dataType.match('audio')) {
-        audio = new Audio(`data:${question.dataType};${question.dataEncoding},${question.data}`);
-        playAudio = true;
-        html += `<img src="/assets/images/audio.png">`;
+        //console.log(question.data);
+        html += `<img src="/assets/images/audio.png"><br>`;
+        html += `<audio src="data:${question.dataType};${question.dataEncoding},${question.data}" controls="controls" autoplay="true">`;
+        //audio = new Audio(`data:${question.dataType};${question.dataEncoding},${question.data}`);
+        //playAudio = true;
       }
       html += '</div>';
     }
@@ -1384,13 +1389,12 @@
     `;
     main.innerHTML = html;
     questionActive = true;
-    if(playAudio) {
-      window.focus();
-      audio.play();
-      window.setTimeout(function() {
-        audio.pause();
-      },question.time/1000)
-    }
+    // if(playAudio) {
+    //   let promise = audio.play();
+    //   window.setTimeout(function() {
+    //     audio.pause();
+    //   },question.time/1000)
+    // }
 
     if (currentQuestionNr++ < currentQuiz.questions.length - 1) {
       startTimer(question.time/1000, function () {
@@ -1572,7 +1576,7 @@
       <div class="question-header">Frage</div>
       <div class="question-text"><textarea placeholder="Fragentext" default rows=5 name="question">Frage</textarea></div>
       <label>Verfügbare Zeit (in Sekunden)</label><br>
-      <input type="text" name="question-time" value="10"><br>
+      <input type="text" name="question-time" value="4"><br>
       <div class="question-answer">
         <label>Antwort</label><br>
         <input placeholder="Antwort" type="text" value="1" name="answer">
