@@ -1034,7 +1034,6 @@
   function getRandomQuestion(categoryID, questionNr) {
     let xhttp = new XMLHttpRequest();
     xhttp.open('GET', `http://localhost:3003/question?category=${categoryID}&answers=4`, true);
-    //xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     let questionResponse = {};
           
     xhttp.onreadystatechange = function () {
@@ -1059,6 +1058,11 @@
   }
 
   function getQuiz() {
+    if(selectedCategories.length === 0) {
+      alert("Es muss mindestens eine Kategorie ausgewählt sein.");
+      return;
+    }
+
     showLoadingScreen("Quiz wird erstellt...");
     let minQuestions = 10;
     let maxQuestions = 20;
