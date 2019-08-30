@@ -233,7 +233,7 @@
       border-radius: 3px;
       padding: 8px;
       box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
-      margin-bottom: 1em;
+      margin-bottom: 10px;
       font-size: 1.5em;
     }
 
@@ -516,6 +516,7 @@
     div.quiz-media {
       display:flex;
       justify-content: center;
+      margin-bottom:10px;
     }
 
     div.quiz-media img { 
@@ -944,12 +945,14 @@
     <div class="quiz-question">
     <div class="quiz-text">${question.text}`;
     if(question.dataType !== null && typeof question.dataType !== 'undefined') {
+      html += '<div class="quiz-media">';
       if(question.dataType.match('image')) {
         html += `<img src="data:${question.dataType};${question.dataEncoding},${question.data}">`;
       }
       else if (question.dataType.match('audio')) {
         html += `<br><audio src="data:${question.dataType};${question.dataEncoding},${question.data}" controls="controls"></audio>`;
       }
+      html += '</div>';
     }
     html += '</div>';
     for (let j = 0; question.answers.length > j; j++) {
@@ -1043,7 +1046,6 @@
     xhttp.onreadystatechange = function () {
       if (xhttp.readyState == 4) {
         if((xhttp.status > 199 && xhttp.status < 300) || xhttp.status == 304) {
-          console.log(xhttp.responseText)
           currentQuiz.questions[questionNr] = JSON.parse(xhttp.responseText);
         }
         else{
@@ -1351,7 +1353,7 @@
     <div class="quiz-header">Frage ${currentQuestionNr + 1} </div>
     <div id="timer-bar" style="animation: timer-bar ${question.time/1000}s linear 0s"></div>
     <div class="quiz-question">
-    <div class="quiz-text">${question.text}</div>
+    <div class="quiz-text">${question.text}
     `;
     if(question.dataType !== null && typeof question.dataType !== 'undefined') {
       html += '<div class="quiz-media">';
@@ -1365,6 +1367,7 @@
       }
       html += '</div>';
     }
+    html += '</div>';
     for (j = 0; question.answers.length > j; j++) {
       html += `
       <div class="quiz-answer">
@@ -1382,6 +1385,7 @@
     main.innerHTML = html;
     questionActive = true;
     if(playAudio) {
+      window.focus();
       audio.play();
       window.setTimeout(function() {
         audio.pause();
@@ -1488,7 +1492,7 @@
   <header>
     <div class="header-content">Quiz Battle
       <div class="nav-buttons">
-        <button class="nav-button" onclick="initialize()">home</button>
+        <button class="nav-button" onclick="window.location.reload()">home</button>
       </div>
     </div>
   </header>
