@@ -1121,7 +1121,7 @@
 
     let question = {};
     let answerArray = [];
-    
+
     let foundAnswer = false;
 
     let questionText = questionContainer.querySelector('textarea[name="question"]').value;
@@ -1157,7 +1157,7 @@
     }
     question = {
       text: questionText,
-      time: questionTime
+      time: questionTime*1000
     };
 
     let xhttp = new XMLHttpRequest();
@@ -1326,7 +1326,7 @@
     let html = `
     <div id="quiz">
     <div class="quiz-header">Frage ${currentQuestionNr + 1} </div>
-    <div id="timer-bar" style="animation: timer-bar ${question.time}s linear 0s"></div>
+    <div id="timer-bar" style="animation: timer-bar ${question.time/1000}s linear 0s"></div>
     <div class="quiz-question">
     <div class="quiz-text">${question.text}</div>
     `;
@@ -1362,16 +1362,16 @@
       audio.play();
       window.setTimeout(function() {
         audio.pause();
-      },10000)
+      },question.time/1000)
     }
 
     if (currentQuestionNr++ < currentQuiz.questions.length - 1) {
-      startTimer(question.time, function () {
+      startTimer(question.time/1000, function () {
         saveAnswers();
         showQuestion(currentQuiz.questions[currentQuestionNr]);
       });
     } else {
-      startTimer(question.time, function () {
+      startTimer(question.time/1000, function () {
         saveAnswers();
         showResults();
       });
@@ -1541,7 +1541,7 @@
     <div class="question">
       <div class="question-header">Frage</div>
       <div class="question-text"><textarea placeholder="Fragentext" default rows=5 name="question">Frage</textarea></div>
-      <label>Verfügbare Zeit</label><br>
+      <label>Verfügbare Zeit (in Sekunden)</label><br>
       <input type="text" name="question-time" value="10"><br>
       <div class="question-answer">
         <label>Antwort</label><br>
