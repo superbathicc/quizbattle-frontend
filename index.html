@@ -730,7 +730,7 @@
     /*=========================================================*/
     let main = "";
     let currentQuestionNr = 0;
-    let currentQuiz = {};
+    let currentQuiz = [];
     let quizActive = false;
     let questionActive = false;
     let player1 = {};
@@ -745,8 +745,7 @@
       questionActive = false;
       quizActive = false;
       currentQuestionNr = 0;
-      currentQuiz = {};
-      currentQuiz.questions = [];
+      currentQuiz = [];
       player1 = {};
       player1.answers = [];
       player1.correctAnswers = 0;
@@ -800,7 +799,7 @@
       startTimer(
         5,
         function() {
-          showQuestion(currentQuiz.questions[currentQuestionNr]);
+          showQuestion(currentQuiz[currentQuestionNr]);
         },
         true
       );
@@ -816,8 +815,8 @@
       questionActive = false;
       let html = "";
       html += '<div class="results-screen">';
-      for (let i = 0; currentQuiz.questions.length > i; i++) {
-        let question = currentQuiz.questions[i];
+      for (let i = 0; currentQuiz.length > i; i++) {
+        let question = currentQuiz[i];
         let correctAnswers = [];
         for (let j = 0; question.answers.length > j; j++) {
           if (question.answers[j].correct === true) {
@@ -852,8 +851,8 @@
 
       html += '<div class="quiz-header">Ergebnisse im Detail</div>';
 
-      for (let i = 0; currentQuiz.questions.length > i; i++) {
-        let question = currentQuiz.questions[i];
+      for (let i = 0; currentQuiz.length > i; i++) {
+        let question = currentQuiz[i];
         html += getQuestionResult(question, i);
       }
 
@@ -974,7 +973,7 @@
         `http://localhost:3003/question?category=${categoryID}&answers=4`
       ).then(function(response) {
         try {
-          currentQuiz.questions[questionNr] = JSON.parse(response);
+          currentQuiz[questionNr] = JSON.parse(response);
         } catch (e) {
           alert(e);
         }
@@ -1013,11 +1012,16 @@
         .then(function(values) {
           for (let i = 0; values.length > i; i++) {
             try {
-              currentQuiz.questions[i] = JSON.parse(values[i]);
+              let question = JSON.parse(values[i]);
+              currentQuiz[i] = question;
             } catch (e) {
               alert(e);
             }
           }
+          currentQuiz = currentQuiz.filter(
+            (question, index, self) =>
+              self.findIndex(q => q._id === question._id) === index
+          );
           characterSelect();
         })
         .catch(function(e) {
@@ -1256,10 +1260,10 @@
       main.innerHTML = html;
       questionActive = true;
 
-      if (currentQuestionNr++ < currentQuiz.questions.length - 1) {
+      if (currentQuestionNr++ < currentQuiz.length - 1) {
         startTimer(question.time / 1000, function() {
           saveAnswers();
-          showQuestion(currentQuiz.questions[currentQuestionNr]);
+          showQuestion(currentQuiz[currentQuestionNr]);
         });
       } else {
         startTimer(question.time / 1000, function() {
