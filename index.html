@@ -974,7 +974,9 @@
 
     function selectCategory(i) {
       if (selectedCategories.includes(categories[i])) {
-        selectedCategories.pop(categories[i]);
+        selectedCategories = selectedCategories.filter(
+          category => category._id !== categories[i]._id
+        );
       } else {
         selectedCategories.push(categories[i]);
       }
