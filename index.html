@@ -18,41 +18,41 @@
         font-family: Lato;
         font-weight: normal;
         font-style: normal;
-        src: url("/assets/fonts/Lato.woff");
+        src: url('/assets/fonts/Lato.woff');
       }
 
       @font-face {
         font-family: Lato;
         font-weight: bold;
         font-style: normal;
-        src: url("/assets/fonts/Lato-Bold.woff");
+        src: url('/assets/fonts/Lato-Bold.woff');
       }
 
       @font-face {
         font-family: Lato;
         font-weight: normal;
         font-style: italic;
-        src: url("/assets/fonts/Lato-Italic.woff");
+        src: url('/assets/fonts/Lato-Italic.woff');
       }
 
       @font-face {
         font-family: Lato;
         font-weight: bold;
         font-style: italic;
-        src: url("/assets/fonts/Lato-BoldItalic.woff");
+        src: url('/assets/fonts/Lato-BoldItalic.woff');
       }
 
       @font-face {
         font-family: Montserrat;
         font-weight: bold;
-        src: url("/assets/fonts/Montserrat.otf");
+        src: url('/assets/fonts/Montserrat.otf');
       }
 
       @font-face {
         font-family: Ligature;
         font-weight: normal;
         font-style: normal;
-        src: url("/assets/fonts/Ligature.woff");
+        src: url('/assets/fonts/Ligature.woff');
       }
 
       body {
@@ -148,7 +148,12 @@
         color: white;
         background-color: #7289da;
         box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
-        outline: none;
+        outline: none !important;
+      }
+
+      button:focus {
+        outline: none !important;
+        border: none;
       }
 
       button:hover {
@@ -159,9 +164,16 @@
       button:active {
         transform: scale(1);
         box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3);
+        outline: none !important;
+        border: none;
       }
 
-      input[type="file"] {
+      button::-moz-focus-inner {
+        border: 0;
+        outline: none !important;
+      }
+
+      input[type='file'] {
         display: none;
       }
 
@@ -252,11 +264,11 @@
         padding: 8px;
         position: relative;
         opacity: 0;
-        animation: popIn 0.3s ease 0s forwards;
         font-size: 1.3em;
         display: flex;
         justify-content: flex-start;
         align-items: center;
+        animation: popIn 0.3s ease 0s forwards;
       }
 
       div.quiz-answer-correct {
@@ -538,7 +550,7 @@
         width: auto;
       }
 
-      textarea[name="question"] {
+      textarea[name='question'] {
         font-family: Lato, sans-serif;
         border-radius: 3px;
         resize: none;
@@ -551,7 +563,7 @@
         box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.3) inset;
       }
 
-      input[type="text"] {
+      input[type='text'] {
         font-family: Lato, sans-serif;
         border-radius: 3px;
         margin-bottom: 1em;
@@ -678,13 +690,13 @@
 
   <script>
     // Start on DOM-Load
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener('DOMContentLoaded', function() {
       initialize();
     });
 
     // catch keypress
     window.addEventListener(
-      "keyup",
+      'keyup',
       function(e) {
         keyPress(e);
       },
@@ -728,7 +740,7 @@
     }
     // Globals
     /*=========================================================*/
-    let main = "";
+    let main = '';
     let currentQuestionNr = 0;
     let currentQuiz = [];
     let quizActive = false;
@@ -741,7 +753,7 @@
     /*=========================================================*/
 
     function initialize() {
-      main = document.getElementById("main");
+      main = document.getElementById('main');
       questionActive = false;
       quizActive = false;
       currentQuestionNr = 0;
@@ -749,37 +761,37 @@
       player1 = {};
       player1.answers = [];
       player1.correctAnswers = 0;
-      player1.character = "";
-      player1.name = "Spieler 1";
+      player1.character = '';
+      player1.name = 'Spieler 1';
       player2 = {};
       player2.answers = [];
       player2.correctAnswers = 0;
-      player2.character = "";
-      player2.name = "Spieler 2";
+      player2.character = '';
+      player2.name = 'Spieler 2';
       selectedCategories = [];
       startApp();
     }
 
     // display functions
     function startApp() {
-      showLoadingScreen("Quiz Battle wird gestartet...");
+      showLoadingScreen('Quiz Battle wird gestartet...');
       getCategories(function() {
-        main.innerHTML = getTemplate("start");
+        main.innerHTML = getTemplate('start');
       });
     }
 
     function playQuiz() {
-      main.innerHTML = getTemplate("play-quiz");
-      let container = main.getElementsByClassName("categories")[0];
+      main.innerHTML = getTemplate('play-quiz');
+      let container = main.getElementsByClassName('categories')[0];
       if (categories.length == 0) {
         container.innerHTML =
-          "<p>Es gibt noch keine Kategorien. Es müssen erst Kategorien mit Fragen erstellt werden.</p>";
+          '<p>Es gibt noch keine Kategorien. Es müssen erst Kategorien mit Fragen erstellt werden.</p>';
       }
       for (let i = 0; categories.length > i; i++) {
-        let button = document.createElement("button");
-        button.className = "category";
+        let button = document.createElement('button');
+        button.className = 'category';
         button.setAttribute(
-          "onclick",
+          'onclick',
           `selectCategory(${i}), this.classList.toggle("category-selected")`
         );
         button.innerHTML = categories[i].name;
@@ -788,10 +800,10 @@
     }
 
     function createQuestion() {
-      main.innerHTML = getTemplate("add-questions");
-      let container = main.getElementsByClassName("questions")[0];
+      main.innerHTML = getTemplate('add-questions');
+      let container = main.getElementsByClassName('questions')[0];
       if (!container) return;
-      container.innerHTML = getTemplate("add-question");
+      container.innerHTML = getTemplate('add-question');
     }
 
     function startQuiz() {
@@ -806,14 +818,14 @@
     }
 
     function showLoadingScreen(text) {
-      main.innerHTML = getTemplate("loading-screen");
-      main.getElementsByClassName("loading-text")[0].innerHTML = text;
+      main.innerHTML = getTemplate('loading-screen');
+      main.getElementsByClassName('loading-text')[0].innerHTML = text;
     }
 
     function showResults() {
       quizActive = false;
       questionActive = false;
-      let html = "";
+      let html = '';
       html += '<div class="results-screen">';
       for (let i = 0; currentQuiz.length > i; i++) {
         let question = currentQuiz[i];
@@ -860,23 +872,23 @@
     }
 
     function getQuestionResult(question, nr) {
-      let html = "";
+      let html = '';
       html += `<div class="quiz-header">Frage ${nr + 1}</div>
       <div class="quiz-question">
       <div class="quiz-text">${question.text}`;
       if (
         question.dataType !== null &&
-        typeof question.dataType !== "undefined"
+        typeof question.dataType !== 'undefined'
       ) {
         html += '<div class="quiz-media">';
-        if (question.dataType.match("image")) {
+        if (question.dataType.match('image')) {
           html += `<img src="data:${question.dataType};${question.dataEncoding},${question.data}">`;
-        } else if (question.dataType.match("audio")) {
+        } else if (question.dataType.match('audio')) {
           html += `<br><audio src="data:${question.dataType};${question.dataEncoding},${question.data}" controls="controls"></audio>`;
         }
-        html += "</div>";
+        html += '</div>';
       }
-      html += "</div>";
+      html += '</div>';
       for (let j = 0; question.answers.length > j; j++) {
         if (question.answers[j].correct === true) {
           html += '<div class="quiz-answer-correct">';
@@ -896,22 +908,22 @@
         } else {
           html += '<div class="player2-icon"></div>';
         }
-        html += "</div>";
+        html += '</div>';
       }
-      html += "</div>";
+      html += '</div>';
       return html;
     }
 
     function characterSelect() {
-      main.innerHTML = getTemplate("character-select");
-      let iconContainer = main.getElementsByClassName("character-icons")[0];
+      main.innerHTML = getTemplate('character-select');
+      let iconContainer = main.getElementsByClassName('character-icons')[0];
       for (let i = 1; i <= 42; i++) {
-        let button = document.createElement("button");
-        button.className = "character-icon";
-        button.setAttribute("onclick", "selectCharacter(this)");
+        let button = document.createElement('button');
+        button.className = 'character-icon';
+        button.setAttribute('onclick', 'selectCharacter(this)');
         button.innerHTML =
           '<img src="/assets/images/characters/_(' + i + ').png">';
-        button.style.animation = "popIn 0.2s ease " + i * 0.05 + "s forwards";
+        button.style.animation = 'popIn 0.2s ease ' + i * 0.05 + 's forwards';
         iconContainer.appendChild(button);
       }
     }
@@ -920,22 +932,22 @@
       let charSource = src.firstChild.src;
       if (playerToSelect == 1) {
         let selected = document.getElementsByClassName(
-          "player1-character-selected"
+          'player1-character-selected'
         );
         for (let i = selected.length; i--; ) {
-          selected[i].classList.remove("player1-character-selected");
+          selected[i].classList.remove('player1-character-selected');
         }
-        src.classList.add("player1-character-selected");
+        src.classList.add('player1-character-selected');
         player1.character = charSource;
         playerToSelect = 2;
       } else {
         let selected = document.getElementsByClassName(
-          "player2-character-selected"
+          'player2-character-selected'
         );
         for (let i = selected.length; i--; ) {
-          selected[i].classList.remove("player2-character-selected");
+          selected[i].classList.remove('player2-character-selected');
         }
-        src.classList.add("player2-character-selected");
+        src.classList.add('player2-character-selected');
         player2.character = charSource;
         playerToSelect = 1;
       }
@@ -944,15 +956,15 @@
     function addAnswer(src) {
       let question = src;
       if (!question) return;
-      let answer = document.createElement("div");
-      answer.className = "question-answer";
+      let answer = document.createElement('div');
+      answer.className = 'question-answer';
       let answerHTML = `
       <label>Antwort</label><br>
       <input placeholder="Antwort hier eingeben" type="text" name="answer">
       <input class="answer-checkbox" type="checkbox">
       <label>Richtig</label>
       `;
-      let answers = main.querySelectorAll("div.question-answer");
+      let answers = main.querySelectorAll('div.question-answer');
       answer.innerHTML = answerHTML;
       question.insertBefore(
         answer,
@@ -988,10 +1000,10 @@
 
     function createQuiz() {
       if (selectedCategories.length === 0) {
-        alert("Es muss mindestens eine Kategorie ausgewählt sein.");
+        alert('Es muss mindestens eine Kategorie ausgewählt sein.');
         return;
       }
-      showLoadingScreen("Quiz wird erstellt...");
+      showLoadingScreen('Quiz wird erstellt...');
       let minQuestions = 10;
       let maxQuestions = 20;
       let questionAmount = getRandomInt(minQuestions, maxQuestions);
@@ -1030,7 +1042,7 @@
     }
 
     function getCategories(callback) {
-      getData("http://localhost:3003/categories")
+      getData('http://localhost:3003/categories')
         .then(function(response) {
           try {
             response = JSON.parse(response);
@@ -1039,7 +1051,7 @@
               categories[i].selected = false;
             }
           } catch (e) {
-            alert("Fehler:" + e);
+            alert('Fehler:' + e);
           }
         })
         .then(callback)
@@ -1051,8 +1063,8 @@
     function getData(url) {
       return new Promise(function(resolve, reject) {
         let xhttp = new XMLHttpRequest();
-        xhttp.open("GET", url, true);
-        xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.open('GET', url, true);
+        xhttp.setRequestHeader('Content-type', 'application/json');
         xhttp.onload = function() {
           resolve(xhttp.responseText);
         };
@@ -1066,8 +1078,8 @@
     function sendData(url, data, binary) {
       return new Promise(function(resolve, reject) {
         let xhttp = new XMLHttpRequest();
-        xhttp.open("POST", url, true);
-        if (!binary) xhttp.setRequestHeader("Content-type", "application/json");
+        xhttp.open('POST', url, true);
+        if (!binary) xhttp.setRequestHeader('Content-type', 'application/json');
         xhttp.onload = function() {
           resolve(xhttp.responseText);
         };
@@ -1079,10 +1091,10 @@
     }
 
     function saveQuestion() {
-      let questionContainer = document.getElementsByClassName("question")[0];
+      let questionContainer = document.getElementsByClassName('question')[0];
 
       if (questionContainer == null) {
-        alert("Error: No questions found.");
+        alert('Error: No questions found.');
         return;
       }
 
@@ -1094,20 +1106,20 @@
       let questionText = questionContainer.querySelector(
         'textarea[name="question"]'
       ).value;
-      if (questionText === "") {
-        alert("Fehler: Die Frage kann nicht leer sein.");
+      if (questionText === '') {
+        alert('Fehler: Die Frage kann nicht leer sein.');
       }
       let questionTime =
         parseInt(
           questionContainer.querySelector('input[name="question-time"').value
         ) || 10;
-      let answers = questionContainer.getElementsByClassName("question-answer");
+      let answers = questionContainer.getElementsByClassName('question-answer');
       let categoryName = questionContainer.querySelector(
         'input[name="category"]'
       ).value;
       let file = questionContainer.querySelector('input[name="data"').value;
-      if (categoryName === "") {
-        alert("Fehler: Keine Kategorie angegeben.");
+      if (categoryName === '') {
+        alert('Fehler: Keine Kategorie angegeben.');
         return;
       }
 
@@ -1116,9 +1128,9 @@
         answerArray[j].text = answers[j].querySelector(
           'input[name="answer"]'
         ).value;
-        if (answerArray[j].text === "") {
+        if (answerArray[j].text === '') {
           alert(
-            "Fehler: Eine Antwort kann nicht leer sein. Antwort:" + (j + 1)
+            'Fehler: Eine Antwort kann nicht leer sein. Antwort:' + (j + 1)
           );
         }
         if (
@@ -1131,7 +1143,7 @@
         }
       }
       if (!foundAnswer) {
-        alert("Your question needs at least one correct answer!");
+        alert('Your question needs at least one correct answer!');
         return;
       }
       question = {
@@ -1141,7 +1153,7 @@
 
       // create a new question
       let questionResponse;
-      sendData("http://localhost:3003/question", JSON.stringify(question))
+      sendData('http://localhost:3003/question', JSON.stringify(question))
         .then(function(result) {
           try {
             questionResponse = JSON.parse(result);
@@ -1151,20 +1163,20 @@
         })
         .then(function() {
           return sendData(
-            "http://localhost:3003/question/" +
+            'http://localhost:3003/question/' +
               questionResponse._id +
-              "/answer",
+              '/answer',
             JSON.stringify(answerArray)
           );
         })
         .then(function(response) {
-          if (file !== "") {
-            let form = document.getElementById("upload");
+          if (file !== '') {
+            let form = document.getElementById('upload');
             let fileData = new FormData(form);
             return sendData(
-              "http://localhost:3003/question/" +
+              'http://localhost:3003/question/' +
                 questionResponse._id +
-                "/data",
+                '/data',
               fileData,
               true
             );
@@ -1174,7 +1186,7 @@
           return setCategory(questionResponse._id, categoryName);
         })
         .then(function(response) {
-          alert("Frage gespeichert.");
+          alert('Frage gespeichert.');
           getCategories(createQuestion());
         })
         .catch(function(e) {
@@ -1183,21 +1195,21 @@
     }
 
     function setCategory(questionID, categoryName) {
-      let categoryID = "";
+      let categoryID = '';
 
       for (let i = 0; categories.length > i; i++) {
         if (categories[i].name === categoryName) {
           categoryID = categories[i]._id;
         }
       }
-      if (categoryID !== "") {
+      if (categoryID !== '') {
         return sendData(
-          "http://localhost:3003/question/" + questionID + "/category",
+          'http://localhost:3003/question/' + questionID + '/category',
           `{"id":"${categoryID}"}`
         );
       } else {
         return sendData(
-          "http://localhost:3003/question/" + questionID + "/category",
+          'http://localhost:3003/question/' + questionID + '/category',
           `{"name":"${categoryName}"}`
         );
       }
@@ -1215,7 +1227,7 @@
     }
 
     function showQuestion(question) {
-      if (typeof question.selected !== "undefined") {
+      if (typeof question.selected !== 'undefined') {
         question.answers = question.selected;
       }
       question.answers = shuffle(question.answers);
@@ -1231,21 +1243,21 @@
       `;
       if (
         question.dataType !== null &&
-        typeof question.dataType !== "undefined"
+        typeof question.dataType !== 'undefined'
       ) {
         html += '<div class="quiz-media">';
-        if (question.dataType.match("image")) {
+        if (question.dataType.match('image')) {
           html += `<img src="data:${question.dataType};${question.dataEncoding},${question.data}">`;
-        } else if (question.dataType.match("audio")) {
+        } else if (question.dataType.match('audio')) {
           html += `<img src="/assets/images/audio.png"><br>`;
           html += `<audio src="data:${question.dataType};${question.dataEncoding},${question.data}" controls="controls" autoplay="true">`;
         }
-        html += "</div>";
+        html += '</div>';
       }
-      html += "</div>";
+      html += '</div>';
       for (j = 0; question.answers.length > j; j++) {
         html += `
-        <div class="quiz-answer">
+        <div class="quiz-answer" style="animation:popIn 0.3s ease 0.${j}s forwards">
         <div class="quiz-answer-number">${String.fromCharCode(j + 65)}</div>
         ${question.answers[j].text}
         <div class="player1-icon"></div>
@@ -1287,16 +1299,16 @@
     }
 
     function showTimer(length) {
-      let html = '<div id="timer">' + length + "</div>";
+      let html = '<div id="timer">' + length + '</div>';
       main.innerHTML = html;
       let timerId = setTimeout(function tick() {
-        let counter = parseInt(document.getElementById("timer").textContent);
+        let counter = parseInt(document.getElementById('timer').textContent);
         if (counter - 1 > 0) {
           document.getElementById(
-            "timer"
+            'timer'
           ).innerHTML = `<div class="timer-number">${counter - 1}</div>`;
         } else {
-          document.getElementById("timer").innerHTML =
+          document.getElementById('timer').innerHTML =
             '<div class="timer-number-finished">Start!</div>';
         }
         if (counter > 1) timerId = setTimeout(tick, 1000);
@@ -1312,19 +1324,19 @@
     }
 
     function saveAnswers() {
-      let answers = document.getElementsByClassName("quiz-answer");
+      let answers = document.getElementsByClassName('quiz-answer');
       let p1Answers = [];
       let p2Answers = [];
       let p1AnswerCount = 0;
       let p2AnswerCount = 0;
       for (let i = 0; answers.length > i; i++) {
-        let p1 = answers[i].getElementsByClassName("player1-icon")[0];
-        let p2 = answers[i].getElementsByClassName("player2-icon")[0];
-        if (p1.classList.contains("icon-active")) {
+        let p1 = answers[i].getElementsByClassName('player1-icon')[0];
+        let p2 = answers[i].getElementsByClassName('player2-icon')[0];
+        if (p1.classList.contains('icon-active')) {
           p1Answers[p1AnswerCount] = i;
           p1AnswerCount++;
         }
-        if (p2.classList.contains("icon-active")) {
+        if (p2.classList.contains('icon-active')) {
           p2Answers[p2AnswerCount] = i;
           p2AnswerCount++;
         }
@@ -1335,11 +1347,11 @@
 
     function lockAnswer(playerNr, answerNr) {
       if (!questionActive) return;
-      let answer = document.getElementsByClassName("quiz-answer")[answerNr - 1];
+      let answer = document.getElementsByClassName('quiz-answer')[answerNr - 1];
       let icon = answer.getElementsByClassName(
-        "player" + playerNr + "-icon"
+        'player' + playerNr + '-icon'
       )[0];
-      icon.classList.toggle("icon-active");
+      icon.classList.toggle('icon-active');
       if (playerNr == 1) {
         icon.style.backgroundImage = `url("${player1.character}")`;
       } else {
@@ -1351,7 +1363,7 @@
     function getTemplate(id) {
       let template = document.getElementById(id);
       if (!template) {
-        template = document.getElementById("error");
+        template = document.getElementById('error');
       }
       template = template.innerHTML;
       return template.trim();
